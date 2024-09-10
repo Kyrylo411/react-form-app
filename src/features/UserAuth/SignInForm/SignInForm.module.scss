@@ -1,0 +1,15 @@
+.formWrapper {
+	width: 100%;
+	max-width: 450px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	align-items: flex-end;
+}
+
+.signInForm {
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+	width: 100%;
+}
