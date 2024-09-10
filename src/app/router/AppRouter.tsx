@@ -2,6 +2,7 @@ import { Suspense, useCallback } from 'react'
 import { AppRouterProps, routerConfig, RouterPath } from './routerConfig'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { PROFILE_LOCALSTORAGE_KEY } from '../../shared/const/localStorage'
+import { PageLoader } from '../../widgets/PageLoader/PageLoader'
 
 const AppRouter = () => {
 	const location = useLocation()
@@ -9,7 +10,7 @@ const AppRouter = () => {
 
 	const render = useCallback((route: AppRouterProps) => {
 		const element = (
-			<Suspense fallback='loading...'>
+			<Suspense fallback={<PageLoader />}>
 				{route.element}
 			</Suspense>
 		)

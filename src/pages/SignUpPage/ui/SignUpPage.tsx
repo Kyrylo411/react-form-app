@@ -1,8 +1,6 @@
 import clsx from 'clsx'
 import classes from './SignUpPage.module.scss'
 import { SignUpForm } from '../../../features/UserAuth'
-import { useEffect } from 'react'
-import axios from 'axios'
 
 interface Props {
 	className?: string

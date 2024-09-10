@@ -1,18 +1,13 @@
 import clsx from 'clsx'
 import classes from './AdminPage.module.scss'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import axios from 'axios'
 import Button from '../../../shared/components/Button/Button'
 import { Input } from '../../../shared/components/Input/Input'
-// import { useNavigate } from 'react-router-dom'
-// import { RouterPath } from '../../../app/router/routerConfig'
-import { PROFILE_LOCALSTORAGE_KEY } from '../../../shared/const/localStorage'
-import { useAuth } from '../../../app/AuthContext/AuthContext'
-
-interface User {
-	email: string
-	password: string
-}
+import { useAuth } from '../../../app/AuthContext/useAuth'
+import InfoMessage, { MessageType } from '../../../shared/components/InfoMessage/InfoMessage'
+import { Loader } from '../../../shared/components/Loader/Loader'
+import { validateEmail, validatePassword } from '../../../shared/validation/formValidation'
 
 interface Props {
 	className?: string
@@ -25,16 +20,14 @@ function AdminPage(props: Props) {
 	const [password, setPassword] = useState('')
 	const [changeEmail, setChangeEmail] = useState(false)
 	const [changePassword, setChangePassword] = useState(false)
+	const [errorMessage, setErrorMessage] = useState('')
+	const [emailError, setEmailError] = useState('')
+	const [passwordError, setPasswordError] = useState('')
+	const [successMessage, setSuccessMessage] = useState('')
 	const { userId } = useAuth()
-	// const navigate = useNavigate();
-	// const profile = localStorage.getItem(PROFILE_LOCALSTORAGE_KEY)
+	const disabled = changePassword || changeEmail || !email || !password
 
-	// if (!profile) {
-	// 	navigate(RouterPath.sign_in)
-	// }
-
-	const getUser = async () => {
-
+	const getProfile = async () => {
 		try {
 			setLoading(true)
 			const response = await axios.get(`http://localhost:8000/profiles/${userId}`)
@@ -43,6 +36,7 @@ function AdminPage(props: Props) {
 		} catch (e) {
 			if (axios.isAxiosError(e)) {
 				console.log('ERROR: ', e.response?.data?.message)
+				setErrorMessage(e.response?.data?.message)
 			}
 		} finally {
 			setLoading(false)
@@ -50,34 +44,50 @@ function AdminPage(props: Props) {
 	}
 
 	useEffect(() => {
-		getUser()
+		getProfile()
 	}, [])
 
-	const handleEmailChange = (value: string) => {
-		setEmail(value)
-	}
-	const handlePasswordChange = (value: string) => {
-		setPassword(value)
-	}
+	const onSubmit = async (e: FormEvent) => {
+		e.preventDefault()
 
-	const handleSave = async () => {
+		if (!validateEmail(email)) {
+			setEmailError('Enter correct email')
+			return
+		}
+		if (!validatePassword(password)) {
+			setPasswordError('Password must be 6-20 characters, include one uppercase letter, one lowercase letter, one number, and one special character')
+			return
+		}
 		try {
 			await axios.put(`http://localhost:8000/profiles/${userId}`, {
 				email,
 				password
 			})
+			setSuccessMessage('Profile successfully updated')
 		} catch (e) {
 			if (axios.isAxiosError(e)) {
 				console.log('ERROR: ', e.response?.data?.message)
+				setErrorMessage(e.response?.data?.message)
 			}
 		} finally {
 			setLoading(false)
 		}
 	}
 
+	const handleEmailChange = (value: string) => {
+		setEmail(value)
+		setEmailError('')
+	}
+
+	const handlePasswordChange = (value: string) => {
+		setPassword(value)
+		setPasswordError('')
+	}
+
 	const handleEmailChangeToggle = () => {
 		setChangeEmail(!changeEmail)
 	}
+
 	const handlePasswordChangeToggle = () => {
 		setChangePassword(!changePassword)
 	}
@@ -86,8 +96,8 @@ function AdminPage(props: Props) {
 		<div className={clsx(classes.adminPage, className)}>
 			<h1>ADMIN PAGE</h1>
 			{loading
-				? <div>...Loading</div>
-				: <div className={classes.userInfo}>
+				? <Loader />
+				: <form onSubmit={onSubmit} className={classes.userInfo}>
 					<div className={classes.wrapper}>
 						<p>Email:</p>
 						<Input
@@ -97,8 +107,9 @@ function AdminPage(props: Props) {
 							type="text"
 							name='email'
 							className={classes.input}
+							error={emailError}
 						/>
-						<button className={classes.btn} onClick={handleEmailChangeToggle}>{changeEmail ? "save" : "change"}</button>
+						<div className={classes.btn} onClick={handleEmailChangeToggle}>{changeEmail ? "save" : "change"}</div>
 					</div>
 					<div className={classes.divider} />
 					<div className={classes.wrapper}>
@@ -110,13 +121,17 @@ function AdminPage(props: Props) {
 							name='password'
 							readOnly={!changePassword}
 							className={classes.input}
+							error={passwordError}
+							min={6}
+							max={20}
 						/>
-						<button className={classes.btn} onClick={handlePasswordChangeToggle}>{changePassword ? "save" : "change"}</button>
+						<div className={classes.btn} onClick={handlePasswordChangeToggle}>{changePassword ? "save" : "change"}</div>
 					</div>
-
-				</div>
+					<InfoMessage text={errorMessage} />
+					<InfoMessage text={successMessage} type={MessageType.SUCCESS} />
+					<Button type='submit' disabled={disabled}>Save</Button>
+				</form>
 			}
-			<Button disabled={changePassword || changeEmail} onClick={handleSave}>Save</Button>
 		</div>
 	)
 }

@@ -4,4 +4,9 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 30px;
+	padding: 0 110px;
+	height: 100%;
+	@media (max-width:768px) {
+		padding: 30px;
+	}
 }

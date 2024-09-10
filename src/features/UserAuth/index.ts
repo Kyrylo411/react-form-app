@@ -1,2 +1,7 @@
-export { SignInFormAsync as SignInForm } from './SignInForm/SignInForm.async';
-export { SignUpFormAsync as SignUpForm } from './SignUpForm/SignUpForm.async';
+import SignInForm from './SignInForm/SignInForm';
+import SignUpForm from './SignUpForm/SignUpForm';
+
+export {
+	SignInForm,
+	SignUpForm
+}

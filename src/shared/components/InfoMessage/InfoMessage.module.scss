@@ -1,0 +1,13 @@
+.infoMessage {
+	width: 100%;
+}
+
+.text {
+	color: red;
+	font-size: 14px;
+	text-align: center;
+
+	&.success {
+		color: rgb(56, 241, 0);
+	}
+}

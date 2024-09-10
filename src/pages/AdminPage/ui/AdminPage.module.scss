@@ -4,6 +4,10 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 30px;
+	padding: 0px 110px;
+	@media (max-width:768px) {
+		padding: 30px;
+	}
 }
 
 .userInfo{
@@ -24,7 +28,11 @@
 	& > p {
 		text-transform: uppercase;
 	}
-
+	@media (max-width:768px) {
+		flex-direction: column;
+		align-items: flex-start;
+		height: auto;
+	}
 }
 
 .input {
@@ -33,6 +41,9 @@
 	
 	& input {
 		font-size: 16px;
+	}
+	@media (max-width:768px) {
+		margin: 10px 0;
 	}
 }
 
@@ -43,6 +54,10 @@
 }
 
 .btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 14px;
 	width: 100px;
 	background: none;
 	outline: none;

@@ -4,6 +4,6 @@ export const validateEmail = (email: string) => {
 };
 
 export const validatePassword = (password: string) => {
-	const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,18}$/
+	const passwordRegex = /^(?![!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?!.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]$)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{6,20}$/
 	return passwordRegex.test(password);
 };

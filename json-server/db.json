@@ -1,29 +1,9 @@
 {
   "profiles": [
     {
-      "email": "testemai123l@gmial.com",
+      "email": "testemail@gmial.com",
       "password": "123@QWE123",
       "id": "1"
-    },
-    {
-      "email": "did@gmail.com",
-      "password": "123",
-      "id": "h912W0U"
-    },
-    {
-      "id": "user_1725960529868",
-      "email": "did123@gmail.com",
-      "password": "asd123"
-    },
-    {
-      "id": "user_1725960593930",
-      "email": "did1234@gmail.com",
-      "password": "asd"
-    },
-    {
-      "id": "1725963554088",
-      "email": "testemail1@gmial.com",
-      "password": "asd"
     }
   ]
 }
