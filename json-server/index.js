@@ -4,6 +4,7 @@ const path = require('path');
 
 const server = jsonServer.create();
 const router = jsonServer.router(path.resolve(__dirname, 'db.json'));
+const PORT = 8000
 
 server.use(jsonServer.defaults({}));
 server.use(jsonServer.bodyParser);
@@ -61,6 +62,6 @@ server.post('/login', (req, res) => {
 
 server.use(router);
 
-server.listen(8000, () => {
-	console.log('server is running on 8000 port');
+server.listen(PORT, () => {
+	console.log(`server is running on ${PORT} port`);
 });
