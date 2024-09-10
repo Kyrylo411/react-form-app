@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Button from '../../../shared/components/Button/Button'
 import { Input } from '../../../shared/components/Input/Input'
+// import { useNavigate } from 'react-router-dom'
+// import { RouterPath } from '../../../app/router/routerConfig'
+import { PROFILE_LOCALSTORAGE_KEY } from '../../../shared/const/localStorage'
+import { useAuth } from '../../../app/AuthContext/AuthContext'
 
 interface User {
 	email: string
@@ -21,21 +25,25 @@ function AdminPage(props: Props) {
 	const [password, setPassword] = useState('')
 	const [changeEmail, setChangeEmail] = useState(false)
 	const [changePassword, setChangePassword] = useState(false)
+	const { userId } = useAuth()
+	// const navigate = useNavigate();
+	// const profile = localStorage.getItem(PROFILE_LOCALSTORAGE_KEY)
+
+	// if (!profile) {
+	// 	navigate(RouterPath.sign_in)
+	// }
 
 	const getUser = async () => {
-		const token = localStorage.getItem('token');
+
 		try {
 			setLoading(true)
-			// const response = await axios.get('http://localhost:5000/admin', {
-			// 	headers: {
-			// 		Authorization: `Bearer ${token}`,
-			// 	},
-			// })
-			// setUser(response.data)
-			setEmail('some@mail.com')
-			setPassword('123QWE!@#')
+			const response = await axios.get(`http://localhost:8000/profiles/${userId}`)
+			setEmail(response.data.email)
+			setPassword(response.data.password)
 		} catch (e) {
-			console.log('ERROR', e)
+			if (axios.isAxiosError(e)) {
+				console.log('ERROR: ', e.response?.data?.message)
+			}
 		} finally {
 			setLoading(false)
 		}
@@ -52,8 +60,19 @@ function AdminPage(props: Props) {
 		setPassword(value)
 	}
 
-	const handleSave = () => {
-		console.log('save >>>>',)
+	const handleSave = async () => {
+		try {
+			await axios.put(`http://localhost:8000/profiles/${userId}`, {
+				email,
+				password
+			})
+		} catch (e) {
+			if (axios.isAxiosError(e)) {
+				console.log('ERROR: ', e.response?.data?.message)
+			}
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	const handleEmailChangeToggle = () => {
@@ -97,7 +116,7 @@ function AdminPage(props: Props) {
 
 				</div>
 			}
-			<Button onClick={handleSave}>Save</Button>
+			<Button disabled={changePassword || changeEmail} onClick={handleSave}>Save</Button>
 		</div>
 	)
 }

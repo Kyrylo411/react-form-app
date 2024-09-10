@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../../../shared/components/Button/Button';
 import { RouterPath } from '../../../app/router/routerConfig';
+import { useAuth } from '../../../app/AuthContext/AuthContext';
 
 interface Props {
 	className?: string
@@ -16,17 +17,23 @@ function SignInForm(props: Props) {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const navigate = useNavigate();
+	const { login } = useAuth()
+
 
 	const onSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-
 		try {
-			await axios.post('http://localhost:5000/login', { email, password });
-			// navigate(RouterPath.admin);
-		} catch (error) {
-			console.log('Registration failed. Try again.');
+			const res = await axios.post('http://localhost:8000/login', { email, password });
+			if (res.statusText === 'OK') {
+				const { id, email } = res.data.profile
+				login(id, email)
+				navigate(RouterPath.admin);
+			}
+		} catch (e) {
+			if (axios.isAxiosError(e)) {
+				console.log('ERROR: ', e.response?.data?.message)
+			}
 		}
-		navigate(RouterPath.admin);
 	}
 
 	return (
@@ -48,6 +55,7 @@ function SignInForm(props: Props) {
 					onChange={setPassword}
 					min={6}
 					max={20}
+					autoComplete='on'
 				/>
 				<Button type='submit'>Log in</Button>
 			</form>

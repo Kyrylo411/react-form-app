@@ -1,10 +1,11 @@
 import { Suspense, useCallback } from 'react'
 import { AppRouterProps, routerConfig, RouterPath } from './routerConfig'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { PROFILE_LOCALSTORAGE_KEY } from '../../shared/const/localStorage'
 
 const AppRouter = () => {
-	const auth = true
 	const location = useLocation()
+	const profile = localStorage.getItem(PROFILE_LOCALSTORAGE_KEY)
 
 	const render = useCallback((route: AppRouterProps) => {
 		const element = (
@@ -17,7 +18,10 @@ const AppRouter = () => {
 			<Route
 				path={route.path}
 				key={route.path}
-				element={route.authOnly && !auth ? <Navigate to={RouterPath.sign_in} state={{ from: location }} replace /> : element}
+				element={route.authOnly && !profile
+					? <Navigate to={RouterPath.sign_in} state={{ from: location }} replace />
+					: element
+				}
 			/>
 		)
 	}, [])

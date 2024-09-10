@@ -25,20 +25,22 @@ function SignUpForm(props: Props) {
 	const onSubmit = async (e: FormEvent) => {
 		e.preventDefault()
 
-		if (!validateEmail(email)) {
-			setEmailError('enter correct email')
-			return
-		}
-		if (!validatePassword(password)) {
-			setPasswordError('Password must be 6-20 characters, include one uppercase letter, one lowercase letter, one number, and one special character')
-			return
-		}
+		// if (!validateEmail(email)) {
+		// 	setEmailError('enter correct email')
+		// 	return
+		// }
+		// if (!validatePassword(password)) {
+		// 	setPasswordError('Password must be 6-20 characters, include one uppercase letter, one lowercase letter, one number, and one special character')
+		// 	return
+		// }
 
 		try {
-			await axios.post('http://localhost:5000/register', { email, password });
+			await axios.post('http://localhost:8000/register', { email, password });
 			navigate(RouterPath.sign_in);
-		} catch (error) {
-			console.log('Registration failed. Try again.');
+		} catch (e) {
+			if (axios.isAxiosError(e)) {
+				console.log('ERROR: ', e.response?.data?.message)
+			}
 		}
 	}
 
