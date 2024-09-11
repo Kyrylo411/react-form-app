@@ -6,7 +6,8 @@ import { AuthContext } from './AuthContext';
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [userId, setUserId] = useState<string | null>(null);
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const isAuth = !!localStorage.getItem(PROFILE_LOCALSTORAGE_KEY)
+	const [isAuthenticated, setIsAuthenticated] = useState(isAuth);
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -19,9 +20,9 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	}, []);
 
 	const login = (id: string, email: string) => {
-		setUserId(id);
-		setIsAuthenticated(true);
 		localStorage.setItem(PROFILE_LOCALSTORAGE_KEY, JSON.stringify({ id, email }));
+		setIsAuthenticated(true);
+		setUserId(id);
 	};
 
 	const logout = () => {
