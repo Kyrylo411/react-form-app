@@ -3,6 +3,8 @@ import React, {
 } from 'react'
 import classes from './Input.module.scss'
 import clsx from 'clsx'
+import { ShowIcon } from '../../assets/icons/ShowIcon'
+import { HideIcon } from '../../assets/icons/HideIcon'
 
 type HTMLInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'readOnly'>
 
@@ -16,6 +18,9 @@ interface InputProps extends HTMLInputProps {
 	readOnly?: boolean
 	name?: string
 	error?: string
+	handleEyeClick?: () => void
+	eyeVisible?: boolean
+	withEye?: boolean
 }
 
 export const Input = memo((props: InputProps) => {
@@ -29,6 +34,9 @@ export const Input = memo((props: InputProps) => {
 		readOnly,
 		name,
 		error,
+		handleEyeClick,
+		eyeVisible,
+		withEye,
 		...otherProps
 	} = props
 
@@ -50,17 +58,19 @@ export const Input = memo((props: InputProps) => {
 					{placeholder}
 				</label>
 			)}
-			<input
-				id={name}
-				name={name}
-				className={clsx(classes.input, mods)}
-				type={type}
-				value={value}
-				onChange={onInputChange}
-				readOnly={readOnly}
-				{...otherProps}
-			/>
-			{/* {type === 'password' && <div className={classes.eye} onClick={handleClick} />} */}
+			<div className={classes.iconWrapper}>
+				<input
+					id={name}
+					name={name}
+					className={clsx(classes.input, mods)}
+					type={type}
+					value={value}
+					onChange={onInputChange}
+					readOnly={readOnly}
+					{...otherProps}
+				/>
+				{withEye && <div className={classes.eye} onClick={handleEyeClick}>{eyeVisible ? <HideIcon /> : <ShowIcon />}</div>}
+			</div>
 			{error && <p className={classes.errorText}>{error}</p>}
 		</div>
 	)

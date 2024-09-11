@@ -33,14 +33,14 @@
 	color: red;
 }
 
-// .eye {
-// 	position: absolute;
-// 	width: 15px;
-// 	height: 15px;
-// 	border: 1px solid #000;
-// 	border-radius: 50%;
-// 	right: 10px;
-// 	top: 50%;
-// 	cursor: pointer;
-// 	transform: translateY(50%);
-// }
+.iconWrapper {
+	position: relative;
+}
+
+.eye {
+	position: absolute;
+	top: -5px;
+	right: 0;
+	cursor: pointer;
+	transform: translateY(50%);
+}

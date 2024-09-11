@@ -49,27 +49,20 @@ function Form(props: Props) {
 					required
 					error={emailError}
 				/>
-				<div className={classes.passWrapper}>
-					<Input
-						placeholder='Enter your password'
-						name='password'
-						type={`${visible ? 'text' : 'password'}`}
-						value={password}
-						onChange={handlePasswordChange}
-						error={passwordError}
-						min={6}
-						max={20}
-						autoComplete='on'
-					/>
-					{password
-						&& <div
-							className={clsx(classes.eye, { [classes.open]: visible })}
-							onClick={handlePasswordToggle}>
-							{visible ? 'hide' : 'show'}
-						</div>
-					}
-
-				</div>
+				<Input
+					placeholder='Enter your password'
+					name='password'
+					type={`${visible ? 'text' : 'password'}`}
+					value={password}
+					onChange={handlePasswordChange}
+					error={passwordError}
+					min={6}
+					max={20}
+					autoComplete='on'
+					handleEyeClick={handlePasswordToggle}
+					eyeVisible={visible}
+					withEye
+				/>
 				<Button disabled={btnDisabled} type='submit'>Sign up</Button>
 				<InfoMessage text={errorMessage} />
 			</form>
